@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" fill="none">
+    <!-- Gota de sangre -->
+    <path d="M50 4 C50 4 8 58 8 80 C8 103 27 116 50 116 C73 116 92 103 92 80 C92 58 50 4 50 4 Z" fill="#DC2626"
+        stroke="#991B1B" stroke-width="2" />
+    <!-- Cruz médica en blanco -->
+    <rect x="43" y="67" width="14" height="32" rx="3" fill="white" />
+    <rect x="34" y="76" width="32" height="14" rx="3" fill="white" />
+</svg>
