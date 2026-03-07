@@ -44,8 +44,8 @@ export async function getReporteInventarioSanguineo() {
     volumenTotal: g.donaciones.reduce((acc: number, curr: any) => acc + Number(curr.cantidadMl), 0)
   }));
 
-  const totalUnidades = datosTratados.reduce((acc, curr) => acc + curr.unidades, 0);
-  const totalVolumen = datosTratados.reduce((acc, curr) => acc + curr.volumenTotal, 0);
+  const totalUnidades = datosTratados.reduce((acc: number, curr: any) => acc + curr.unidades, 0);
+  const totalVolumen = datosTratados.reduce((acc: number, curr: any) => acc + curr.volumenTotal, 0);
 
   return {
     desglose: datosTratados,
