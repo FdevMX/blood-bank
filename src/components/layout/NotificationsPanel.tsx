@@ -25,7 +25,7 @@ interface NotificationsPanelProps {
 const config: Record<
   NotificacionTipo,
   {
-    icon: React.ElementType;
+    icon: any;
     iconBg: string;
     iconColor: string;
     titleColor: string;
