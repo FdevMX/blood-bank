@@ -91,7 +91,7 @@ export default async function ReportesPage() {
           </div>
 
           <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
-            {reporteInventario.desglose.map((g, i) => {
+            {reporteInventario.desglose.map((g: { grupo: string; unidades: number; volumenTotal: number }, i: number) => {
               const porcentaje = reporteInventario.totalUnidades > 0 
                 ? (g.unidades / reporteInventario.totalUnidades) * 100 
                 : 0;

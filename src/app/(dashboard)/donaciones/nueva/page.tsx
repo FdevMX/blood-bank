@@ -40,6 +40,9 @@ export default async function NuevaDonacionPage({
     })
   ]);
 
+  type Clasificacion = Awaited<ReturnType<typeof getClasificaciones>>[number];
+  type Grupo = Awaited<ReturnType<typeof getGruposSanguineos>>[number];
+
   return (
     <div className="max-w-4xl mx-auto space-y-6 anim-fade-up d1">
       <div className="mb-8">
@@ -53,8 +56,8 @@ export default async function NuevaDonacionPage({
       </div>
 
       <DonacionForm 
-        clasificaciones={clasificaciones.filter((c: any) => c.activo)} 
-        grupos={grupos.filter((g: any) => g.activo)} 
+        clasificaciones={clasificaciones.filter((c: Clasificacion) => c.activo)} 
+        grupos={grupos.filter((g: Grupo) => g.activo)} 
         donantes={donantes as any}
         defaultDonanteId={donanteId ? parseInt(donanteId) : undefined}
       />

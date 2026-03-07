@@ -27,6 +27,16 @@ import {
   eliminarUsuario,
 } from "@/app/actions/usuarios";
 
+interface UsuarioItem {
+  id: number;
+  nombreUsuario: string;
+  email: string;
+  rol: string;
+  estado: string;
+  ultimoAcceso: string | Date | null;
+  fechaCreacion: string | Date;
+}
+
 // ─── Delete Confirmation Dialog ────────────────────────────────────────────────
 interface DeleteDialogProps {
   isOpen: boolean;
@@ -92,16 +102,16 @@ function DeleteDialog({
 }
 
 // ─── Main Component ─────────────────────────────────────────────────────────────
-export function UsuariosTable({ initialUsers }: { initialUsers: any[] }) {
-  const [usuarios, setUsuarios] = useState(initialUsers);
+export function UsuariosTable({ initialUsers }: { initialUsers: UsuarioItem[] }) {
+  const [usuarios, setUsuarios] = useState<UsuarioItem[]>(initialUsers);
   const [busqueda, setBusqueda] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<any>(null);
+  const [editingUser, setEditingUser] = useState<UsuarioItem | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState<any>(null);
+  const [userToDelete, setUserToDelete] = useState<UsuarioItem | null>(null);
 
   const [formData, setFormData] = useState({
     nombreUsuario: "",
@@ -113,7 +123,7 @@ export function UsuariosTable({ initialUsers }: { initialUsers: any[] }) {
     (u.nombreUsuario + u.email).toLowerCase().includes(busqueda.toLowerCase())
   );
 
-  const openForm = (u?: any) => {
+  const openForm = (u?: UsuarioItem) => {
     setError(null);
     setSuccess(null);
     if (u) {
@@ -161,7 +171,7 @@ export function UsuariosTable({ initialUsers }: { initialUsers: any[] }) {
     }
   };
 
-  const handleEliminarClick = (u: any) => {
+  const handleEliminarClick = (u: UsuarioItem) => {
     setUserToDelete(u);
     setDeleteDialogOpen(true);
   };
