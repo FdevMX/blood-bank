@@ -38,10 +38,10 @@ export async function getReporteInventarioSanguineo() {
     orderBy: { grupo: "asc" }
   });
 
-  const datosTratados = grupos.map(g => ({
+  const datosTratados = grupos.map((g: any) => ({
     grupo: g.grupo,
     unidades: g.donaciones.length,
-    volumenTotal: g.donaciones.reduce((acc, curr) => acc + Number(curr.cantidadMl), 0)
+    volumenTotal: g.donaciones.reduce((acc: number, curr: any) => acc + Number(curr.cantidadMl), 0)
   }));
 
   const totalUnidades = datosTratados.reduce((acc, curr) => acc + curr.unidades, 0);
