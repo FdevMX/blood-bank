@@ -272,8 +272,8 @@ export function CatalogoTable({
       )}
 
       {/* Table */}
-      <div className="rounded-2xl bg-white shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="rounded-2xl bg-white shadow-sm overflow-hidden overflow-x-auto">
+        <table className="w-full text-sm min-w-[700px]">
           <thead>
             <tr className="bg-muted/30">
               <th className="text-left py-3 px-5 font-semibold text-muted-foreground text-xs uppercase tracking-wider">{nameLabel}</th>
