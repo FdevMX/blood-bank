@@ -94,7 +94,7 @@ export async function generarReporteDonacionesDetallado(params: {
   grupoId?: number;
   clasificacionId?: number;
 }) {
-  const where: Prisma.DonacionWhereInput = {};
+  const where: any = {};
 
   if (params.fechaInicio || params.fechaFin) {
     where.fecha = {};
