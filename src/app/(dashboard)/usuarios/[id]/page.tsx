@@ -217,73 +217,61 @@ export default async function UsuarioDetallePage({
                 </div>
               </div>
             ) : (
-              <div className="relative border-l-2 border-dashed border-border/60 ml-4 space-y-8 pb-4">
-                {audits.map((log: any, i: number) => {
-                  const st = getActionStyles(log.accion);
-                  return (
-                    <div
-                      key={log.id}
-                      className="relative pl-10 pt-1 anim-fade-up"
-                      style={{ animationDelay: `${i * 30}ms` }}
-                    >
-                      <div className="absolute -left-[11px] top-3 h-5 w-5 rounded-full bg-white border-[4px] border-slate-900 shadow-sm z-10" />
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left align-middle border-collapse">
+                  <thead>
+                    <tr className="border-b border-border/50 text-xs text-muted-foreground uppercase tracking-wider">
+                      <th className="font-semibold py-3 px-4">Fecha / Hora</th>
+                      <th className="font-semibold py-3 px-4">Acción</th>
+                      <th className="font-semibold py-3 px-4">Registro Afectado</th>
+                      <th className="font-semibold py-3 px-4 text-right">Detalle</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/50">
+                    {audits.map((log: any) => {
+                      const st = getActionStyles(log.accion);
+                      const fechaFormatted = format(new Date(log.fecha), "dd MMM yyyy", { locale: es });
+                      const horaFormatted = format(new Date(log.fecha), "HH:mm");
 
-                      <div className="bg-muted/5 rounded-3xl border border-border/40 p-6 hover:bg-muted/10 transition-all group">
-                        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-                          <div className="flex items-center gap-4">
-                            <div
-                              className={`h-12 w-12 flex border items-center justify-center rounded-2xl shadow-sm shrink-0 ${st.color}`}
-                            >
-                              <st.icon className="h-6 w-6" />
+                      return (
+                        <tr key={log.id} className="hover:bg-muted/30 transition-colors">
+                          <td className="py-3 px-4 whitespace-nowrap">
+                            <p className="font-bold text-foreground text-xs">{fechaFormatted}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">{horaFormatted} hrs</p>
+                          </td>
+                          <td className="py-3 px-4">
+                            <div className="flex items-center gap-2">
+                               <div className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 border ${st.color}`}>
+                                 <st.icon className="h-4 w-4" />
+                               </div>
+                               <span className={`px-2 py-0.5 text-[9px] rounded-md font-black uppercase tracking-widest ${st.color}`}>
+                                 {log.accion}
+                               </span>
                             </div>
-                            <div>
-                              <div className="flex items-center gap-2 flex-wrap">
-                                <span
-                                  className={`px-2 py-0.5 text-[10px] rounded-lg font-black uppercase tracking-widest ${st.color}`}
-                                >
-                                  {log.accion}
-                                </span>
-                                {log.tablaAfectada && (
-                                  <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
-                                    Tabla:{" "}
-                                    <span className="text-foreground">
-                                      {log.tablaAfectada}
-                                    </span>
-                                  </span>
-                                )}
+                          </td>
+                          <td className="py-3 px-4">
+                            {log.tablaAfectada ? (
+                              <div className="flex flex-col gap-0.5">
+                                <span className="text-[10px] font-bold text-muted-foreground uppercase">{log.tablaAfectada}</span>
+                                <span className="font-mono text-xs text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded w-fit">ID: {log.registroId ?? "-"}</span>
                               </div>
-                              <p className="text-sm font-bold text-foreground mt-1 leading-snug">
-                                {log.detalles}
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="text-right shrink-0">
-                            <p className="text-xs font-black text-foreground">
-                              {format(new Date(log.fecha), "HH:mm 'Hrs'", {
-                                locale: es,
-                              })}
-                            </p>
-                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-0.5">
-                              {format(new Date(log.fecha), "dd MMM yyyy", {
-                                locale: es,
-                              })}
-                            </p>
-                          </div>
-                        </div>
-
-                        {log.ipAddress && (
-                          <div className="mt-4 pt-4 border-t border-border/50 flex flex-wrap gap-3">
-                            <div className="flex items-center gap-1.5 px-3 py-1 bg-white rounded-xl border border-border/30 text-[10px] font-bold text-muted-foreground">
-                              <Activity className="h-3 w-3" />
-                              IP: {log.ipAddress}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+                            ) : (
+                              <span className="text-muted-foreground">-</span>
+                            )}
+                          </td>
+                          <td className="py-3 px-4 text-right">
+                            <span className="text-xs font-medium text-foreground">{log.detalles}</span>
+                            {log.ipAddress && (
+                              <div className="text-[10px] font-mono text-muted-foreground mt-1 text-right">
+                                IP: {log.ipAddress}
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             )}
           </div>
