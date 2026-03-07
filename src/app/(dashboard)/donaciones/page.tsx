@@ -4,6 +4,7 @@ import { getDonaciones, actualizarEstadoDonacion } from "@/app/actions/donacione
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { formatDateSafe } from "@/lib/utils";
+import { LiveSearch } from "@/components/ui/LiveSearch";
 
 export const dynamic = "force-dynamic";
 
@@ -47,18 +48,7 @@ export default async function DonacionesPage(props: {
 
       {/* ── Search Bar ── */}
       <div className="rounded-3xl bg-white p-2 shadow-sm border border-border/50 flex">
-        <form action="/donaciones" className="flex-1 relative flex items-center h-12">
-          {currentTab !== "Todos" && <input type="hidden" name="tab" value={currentTab} />}
-          <Search className="absolute left-4 h-5 w-5 text-muted-foreground" />
-          <input
-            type="search"
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar por código de unidad (UN-...), o nombre del donante..."
-            className="w-full h-full bg-transparent pl-12 pr-4 outline-none text-[15px] placeholder:text-muted-foreground"
-          />
-          <button type="submit" className="hidden">Buscar</button>
-        </form>
+        <LiveSearch placeholder="Buscar por código de unidad (UN-...), o nombre del donante..." />
       </div>
 
       {/* ── Tabs ── */}
@@ -91,66 +81,73 @@ export default async function DonacionesPage(props: {
             {donaciones.map((donacion: any) => (
               <div 
                 key={donacion.id} 
-                className="group flex flex-col xl:flex-row xl:items-center justify-between p-5 hover:bg-muted/30 transition-colors gap-5"
+                className="group p-5 hover:bg-muted/30 transition-colors"
               >
-                {/* Info Principal de la Unidad */}
-                <div className="flex items-center gap-4 flex-1">
-                  <div className={`h-14 w-14 rounded-2xl flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden bg-white border`}>
-                     <div className={`absolute bottom-0 left-0 right-0 opacity-20 ${
-                        donacion.estado === 'disponible' ? 'bg-emerald-500' :
-                        donacion.estado === 'utilizada' ? 'bg-blue-500' : 'bg-red-500'
-                     }`} style={{ height: '60%' }} />
-                     <Droplets className={`h-6 w-6 relative z-10 ${
-                        donacion.estado === 'disponible' ? 'text-emerald-500' :
-                        donacion.estado === 'utilizada' ? 'text-blue-500' : 'text-red-500'
-                     }`} />
-                  </div>
+                <div className="flex flex-col xl:flex-row gap-5 xl:items-center">
                   
-                  <div>
-                    <div className="flex items-center gap-2 mb-1 border-b border-dashed pb-1">
-                      <span className="text-xs font-black uppercase tracking-widest text-[#1a1210]">
-                        {donacion.codigo}
-                      </span>
-                      <span className="text-[10px] uppercase font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded-md">
-                        {Number(donacion.cantidadMl)} mL
-                      </span>
+                  {/* Contenedor Izquierdo: Todo el bloque info */}
+                  <div className="flex-1 min-w-0 flex flex-col gap-4">
+                    
+                    {/* Header: Icono + Títulos */}
+                    <div className="flex items-start gap-4">
+                      <div className={`h-14 w-14 rounded-2xl flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden bg-white border mt-1`}>
+                         <div className={`absolute bottom-0 left-0 right-0 opacity-20 ${
+                            donacion.estado === 'disponible' ? 'bg-emerald-500' :
+                            donacion.estado === 'utilizada' ? 'bg-blue-500' : 'bg-red-500'
+                         }`} style={{ height: '60%' }} />
+                         <Droplets className={`h-6 w-6 relative z-10 ${
+                            donacion.estado === 'disponible' ? 'text-emerald-500' :
+                            donacion.estado === 'utilizada' ? 'text-blue-500' : 'text-red-500'
+                         }`} />
+                      </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1 border-b border-dashed border-border/60 pb-1.5">
+                          <span className="text-xs font-black uppercase tracking-widest text-[#1a1210]">
+                            {donacion.codigo}
+                          </span>
+                          <span className="text-[10px] uppercase font-bold text-muted-foreground bg-muted px-2 py-0.5 rounded-md">
+                            {Number(donacion.cantidadMl)} mL
+                          </span>
+                        </div>
+                        
+                        <div className="mt-1.5">
+                          <p className="text-sm font-semibold text-foreground group-hover:text-rose-600 transition-colors break-words">
+                            Extraído de: <Link href={`/donantes/${donacion.idDonante}`} className="hover:underline text-teal-600">{donacion.donante.nombres} {donacion.donante.apellidos}</Link> 
+                            <span className="text-xs text-muted-foreground hidden sm:inline"> (ID: {donacion.donante.codigo})</span>
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="mt-1">
-                      <p className="text-sm font-semibold text-foreground group-hover:text-rose-600 transition-colors">
-                        Extraído de: <Link href={`/donantes/${donacion.idDonante}`} className="hover:underline text-teal-600">{donacion.donante.nombres} {donacion.donante.apellidos}</Link> 
-                        <span className="text-xs text-muted-foreground"> (ID: {donacion.donante.codigo})</span>
-                      </p>
+
+                    {/* Info Médica y Vencimiento */}
+                    <div className="grid grid-cols-3 gap-2 sm:gap-3 border-t border-dashed border-border/60 pt-4 w-full">
+                      <div className="text-center xl:text-left pl-1 sm:pl-3 flex flex-col items-center xl:items-start justify-center">
+                        <p className="text-[9px] sm:text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1.5">Sangre</p>
+                        <span className="inline-flex items-center justify-center h-7 sm:h-8 px-2 sm:px-3 rounded-lg font-black text-xs sm:text-sm text-white bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] shadow-md shadow-red-900/20">
+                          {donacion.grupoSanguineo?.grupo || "S/R"}
+                        </span>
+                      </div>
+
+                      <div className="text-center xl:text-left border-l pl-1 sm:pl-3 border-dashed border-border/60 flex flex-col items-center xl:items-start justify-center overflow-hidden">
+                        <p className="text-[9px] sm:text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1.5">Recolección</p>
+                        <p className="text-[11px] sm:text-sm font-semibold w-full truncate">{formatDateSafe(donacion.fecha)}</p>
+                        <p className="text-[9px] sm:text-xs text-muted-foreground w-full truncate">{new Date(donacion.hora).toLocaleTimeString("es-HN", { hour: '2-digit', minute: '2-digit' })}</p>
+                      </div>
+
+                      <div className="text-center xl:text-left border-l pl-1 sm:pl-3 border-dashed border-border/60 flex flex-col items-center xl:items-start justify-center overflow-hidden">
+                        <p className="text-[9px] sm:text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1.5">Vencimiento</p>
+                        <p className={`text-[11px] sm:text-sm font-semibold w-full truncate ${donacion.estado === 'vencida' ? 'text-red-600' : 'text-foreground'}`}>
+                          {donacion.fechaVencimiento ? formatDateSafe(donacion.fechaVencimiento) : "N/D"}
+                        </p>
+                        <p className="text-[9px] sm:text-xs text-muted-foreground w-full truncate" title={donacion.clasificacion?.nombre}>{donacion.clasificacion?.nombre || "N/A"}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Info Médica y Vencimiento */}
-                <div className="flex items-center gap-5 xl:gap-8 xl:pr-4 flex-wrap">
-                  
-                  <div className="text-left w-24">
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Sangre</p>
-                    <span className="inline-flex items-center justify-center h-8 px-3 rounded-lg font-black text-sm text-white bg-gradient-to-br from-[#d32f2f] to-[#b71c1c] shadow-md shadow-red-900/20">
-                      {donacion.grupoSanguineo?.grupo || "S/R"}
-                    </span>
-                  </div>
-
-                  <div className="text-left w-32 border-l pl-4 border-dashed border-border/60">
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Recolección</p>
-                    <p className="text-sm font-semibold">{formatDateSafe(donacion.fecha)}</p>
-                    <p className="text-xs text-muted-foreground">{new Date(donacion.hora).toLocaleTimeString("es-HN", { hour: '2-digit', minute: '2-digit' })}</p>
-                  </div>
-
-                  <div className="text-left w-32 border-l pl-4 border-dashed border-border/60">
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Vencimiento</p>
-                    <p className={`text-sm font-semibold ${donacion.estado === 'vencida' ? 'text-red-600' : 'text-foreground'}`}>
-                      {donacion.fechaVencimiento ? formatDateSafe(donacion.fechaVencimiento) : "N/D"}
-                    </p>
-                    <p className="text-xs text-muted-foreground">{donacion.clasificacion?.nombre || "Sin clasificar"}</p>
-                  </div>
-
-                  {/* Etiqueta de Estado y Acciones Rápidas */}
-                  <div className="text-right w-36 flex flex-col items-end border-l pl-4 border-dashed border-border/60 ml-auto xl:ml-0 gap-2">
-                    <span className={`inline-flex items-center justify-center px-3 py-1 text-[11px] font-black uppercase rounded-lg shadow-sm border ${
+                  {/* Contenedor Derecho: Estado y Acciones Rápidas */}
+                  <div className="w-full xl:w-48 flex xl:h-full flex-col xl:justify-between items-center xl:items-end border-t xl:border-t-0 xl:border-l pt-4 xl:pt-0 xl:pl-5 border-dashed border-border/60 gap-4">
+                    <span className={`w-full inline-flex items-center justify-center px-4 py-2 text-[11px] font-black uppercase rounded-xl shadow-sm border ${
                       donacion.estado === "disponible" ? "bg-emerald-50 text-emerald-700 border-emerald-200 shadow-emerald-900/10" :
                       donacion.estado === "utilizada" ? "bg-blue-50 text-blue-700 border-blue-200" :
                       "bg-red-50 text-red-700 border-red-200 shadow-red-900/10"
@@ -159,18 +156,18 @@ export default async function DonacionesPage(props: {
                       {donacion.estado}
                     </span>
                     
-                    <div className="flex flex-col items-end gap-1">
-                      <Link href={`/donaciones/${donacion.id}`} className="text-[10px] font-bold text-teal-600 hover:text-teal-800 underline transition-colors">
-                        Ver Detalles Clínicos
+                    <div className="flex flex-row xl:flex-col items-center xl:items-end justify-end gap-2.5 w-full">
+                      <Link href={`/donaciones/${donacion.id}`} className="flex-1 xl:flex-none xl:w-full flex justify-center items-center px-4 py-2 text-[11px] font-bold text-teal-700 bg-teal-50 border border-teal-200 hover:bg-teal-100 rounded-xl transition-colors shadow-sm whitespace-nowrap">
+                        Ver Detalles
                       </Link>
 
                       {session?.user?.rol !== "consulta" && donacion.estado === "disponible" && (
                         <form action={async () => { 
                           "use server"; 
                           await actualizarEstadoDonacion(donacion.id, "descartada", "Descartada por operador desde listado rápido."); 
-                        }}>
-                          <button className="text-[10px] font-bold text-muted-foreground hover:text-red-600 underline transition-colors mt-1">
-                            Marcar Descartada
+                        }} className="flex-1 xl:flex-none xl:w-full">
+                          <button className="w-full flex justify-center items-center px-4 py-2 text-[11px] font-bold text-red-700 bg-red-50 border border-red-200 hover:bg-red-100 rounded-xl transition-colors shadow-sm whitespace-nowrap">
+                            Descartar
                           </button>
                         </form>
                       )}

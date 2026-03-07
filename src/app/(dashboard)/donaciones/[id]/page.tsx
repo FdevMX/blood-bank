@@ -17,18 +17,18 @@ export default async function DonacionDetallePage({ params }: { params: Promise<
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-20 anim-fade-up d1">
       {/* ── Navbar Contextual ── */}
-      <div className="flex items-center justify-between gap-4 border-b border-border/50 pb-5">
-        <div className="flex items-center gap-4">
-          <Link href="/donaciones" className="h-10 w-10 flex items-center justify-center rounded-xl bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground transition-all">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/50 pb-5">
+        <div className="flex items-center gap-4 w-full sm:w-auto">
+          <Link href="/donaciones" className="h-10 w-10 shrink-0 flex items-center justify-center rounded-xl bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground transition-all">
             <ArrowLeft className="h-4 w-4" />
           </Link>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <p className="text-[10px] font-bold uppercase tracking-widest text-rose-600 mb-0.5">Control y Registro Trazable</p>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-lg sm:text-2xl font-extrabold text-foreground tracking-tight">
                 Unidad {donacion.codigo}
               </h1>
-              <span className={`px-3 py-1 text-[10px] font-black uppercase rounded-md shadow-sm border ${
+              <span className={`whitespace-nowrap px-3 py-1 text-[10px] font-black uppercase rounded-md shadow-sm border ${
                   donacion.estado === "disponible" ? "bg-emerald-50 text-emerald-700 border-emerald-200" :
                   donacion.estado === "utilizada" ? "bg-blue-50 text-blue-700 border-blue-200" :
                   "bg-red-50 text-red-700 border-red-200"
@@ -40,14 +40,14 @@ export default async function DonacionDetallePage({ params }: { params: Promise<
         </div>
         
         {session?.user?.rol !== "consulta" && donacion.estado === "disponible" && (
-          <div className="flex items-center gap-2">
-            <form action={async () => { "use server"; await actualizarEstadoDonacion(donacion.id, "utilizada", "Unidad despachada e infundida en paciente con éxito."); }}>
-              <button className="px-4 py-2 text-[13px] font-bold rounded-xl border transition-all bg-blue-50/50 text-blue-700 border-blue-200 hover:bg-blue-100 flex items-center gap-2 shadow-sm">
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:ml-auto">
+            <form action={async () => { "use server"; await actualizarEstadoDonacion(donacion.id, "utilizada", "Unidad despachada e infundida en paciente con éxito."); }} className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto justify-center px-4 py-2 text-[13px] font-bold rounded-xl border transition-all bg-blue-50/50 text-blue-700 border-blue-200 hover:bg-blue-100 flex items-center gap-2 shadow-sm">
                 Marcar Utilizada
               </button>
             </form>
-            <form action={async () => { "use server"; await actualizarEstadoDonacion(donacion.id, "descartada", "Descartada por anomalías post-extracción reportadas por el sistema."); }}>
-              <button className="px-4 py-2 text-[13px] font-bold rounded-xl border transition-all bg-red-50/50 text-red-700 border-red-200 hover:bg-red-100 flex items-center gap-2 shadow-sm">
+            <form action={async () => { "use server"; await actualizarEstadoDonacion(donacion.id, "descartada", "Descartada por anomalías post-extracción reportadas por el sistema."); }} className="w-full sm:w-auto">
+              <button className="w-full sm:w-auto justify-center px-4 py-2 text-[13px] font-bold rounded-xl border transition-all bg-red-50/50 text-red-700 border-red-200 hover:bg-red-100 flex items-center gap-2 shadow-sm">
                 Descartar Unidad
               </button>
             </form>
