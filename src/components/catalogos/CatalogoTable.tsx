@@ -413,7 +413,7 @@ export function CatalogoTable({
       />
 
       <p className="text-xs text-muted-foreground">
-        {items.length} registros • {items.filter(i => i.activo).length} activos • {items.filter(i => !i.activo).length} inactivos
+        {items.length} registros • {items.filter((i: CatalogItem) => i.activo).length} activos • {items.filter((i: CatalogItem) => !i.activo).length} inactivos
       </p>
     </div>
   );

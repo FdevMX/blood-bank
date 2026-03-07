@@ -66,7 +66,7 @@ export function DonanteForm({ initialData, tipos, grupos, enfermedadesCatalog }:
 
   const toggleEnfermedad = (id: number) => {
     setEnfermedades(prev => 
-      prev.includes(id) ? prev.filter(eId => eId !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((eId: number) => eId !== id) : [...prev, id]
     );
   };
 

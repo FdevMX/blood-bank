@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 // ─────────────────────────────────────────────────────────
 // REPORTE 1: DONANTES POR SEXO
@@ -69,11 +70,13 @@ export async function getReporteDonacionesPeriodo() {
     }
   });
 
+  type Donacion = typeof donaciones[number];
+
   const porEstado = {
-    disponible: donaciones.filter(d => d.estado === "disponible").length,
-    utilizada: donaciones.filter(d => d.estado === "utilizada").length,
-    descartada: donaciones.filter(d => d.estado === "descartada").length,
-    vencida: donaciones.filter(d => d.estado === "vencida").length,
+    disponible: donaciones.filter((d: Donacion) => d.estado === "disponible").length,
+    utilizada: donaciones.filter((d: Donacion) => d.estado === "utilizada").length,
+    descartada: donaciones.filter((d: Donacion) => d.estado === "descartada").length,
+    vencida: donaciones.filter((d: Donacion) => d.estado === "vencida").length,
   };
 
   return {
@@ -91,7 +94,7 @@ export async function generarReporteDonacionesDetallado(params: {
   grupoId?: number;
   clasificacionId?: number;
 }) {
-  const where: any = {};
+  const where: Prisma.DonacionWhereInput = {};
 
   if (params.fechaInicio || params.fechaFin) {
     where.fecha = {};
@@ -126,7 +129,8 @@ export async function generarReporteDonacionesDetallado(params: {
   const subtotalesGrupo: Record<string, number> = {};
   const subtotalesClasif: Record<string, number> = {};
 
-  donaciones.forEach((d: any) => {
+  type DonacionDetallada = typeof donaciones[number];
+  donaciones.forEach((d: DonacionDetallada) => {
     const g = d.grupoSanguineo?.grupo || "S/R";
     const c = d.clasificacion?.nombre || "Sin Clasificar";
     subtotalesGrupo[g] = (subtotalesGrupo[g] || 0) + 1;
