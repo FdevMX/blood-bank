@@ -100,6 +100,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Outfit', system-ui, sans-serif;
@@ -110,55 +111,258 @@
 
 /* === ANIMATIONS === */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 @keyframes scaleUp {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
+
 @keyframes slideRight {
-  from { opacity: 0; transform: translateX(-12px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
+
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
 }
+
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.5); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.5);
+  }
 }
+
 @keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-.anim-fade-up { animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.anim-scale { animation: scaleUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.anim-slide { animation: slideRight 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.anim-float { animation: float 3s ease-in-out infinite; }
-.anim-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
-.anim-gradient { animation: gradient-shift 6s ease infinite; background-size: 200% 200%; }
+/* === 3D & LANDING ANIMATIONS === */
+@keyframes float3d {
 
-.d1 { animation-delay: 50ms; }
-.d2 { animation-delay: 100ms; }
-.d3 { animation-delay: 150ms; }
-.d4 { animation-delay: 200ms; }
-.d5 { animation-delay: 300ms; }
-.d6 { animation-delay: 400ms; }
-.d7 { animation-delay: 500ms; }
-.d8 { animation-delay: 600ms; }
+  0%,
+  100% {
+    transform: translateY(0) rotateX(0deg) rotateZ(0deg);
+  }
+
+  33% {
+    transform: translateY(-18px) rotateX(12deg) rotateZ(6deg);
+  }
+
+  66% {
+    transform: translateY(-8px) rotateX(-6deg) rotateZ(-4deg);
+  }
+}
+
+@keyframes spin-ring {
+  from {
+    transform: rotateX(72deg) rotateZ(0deg);
+  }
+
+  to {
+    transform: rotateX(72deg) rotateZ(360deg);
+  }
+}
+
+@keyframes spin-ring-rev {
+  from {
+    transform: rotateX(68deg) rotateZ(360deg);
+  }
+
+  to {
+    transform: rotateX(68deg) rotateZ(0deg);
+  }
+}
+
+@keyframes morph-blob {
+
+  0%,
+  100% {
+    border-radius: 60% 40% 70% 30% / 40% 60% 30% 70%;
+  }
+
+  25% {
+    border-radius: 40% 60% 30% 70% / 70% 30% 60% 40%;
+  }
+
+  50% {
+    border-radius: 70% 30% 50% 50% / 30% 70% 40% 60%;
+  }
+
+  75% {
+    border-radius: 50% 50% 70% 30% / 60% 40% 70% 30%;
+  }
+}
+
+@keyframes shimmer-text {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes tri-float {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-14px) rotate(8deg);
+  }
+}
+
+@keyframes ping-slow {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.anim-fade-up {
+  animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.anim-scale {
+  animation: scaleUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.anim-slide {
+  animation: slideRight 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.anim-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.anim-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.anim-gradient {
+  animation: gradient-shift 6s ease infinite;
+  background-size: 200% 200%;
+}
+
+.d1 {
+  animation-delay: 50ms;
+}
+
+.d2 {
+  animation-delay: 100ms;
+}
+
+.d3 {
+  animation-delay: 150ms;
+}
+
+.d4 {
+  animation-delay: 200ms;
+}
+
+.d5 {
+  animation-delay: 300ms;
+}
+
+.d6 {
+  animation-delay: 400ms;
+}
+
+.d7 {
+  animation-delay: 500ms;
+}
+
+.d8 {
+  animation-delay: 600ms;
+}
 
 /* === CUSTOM SCROLLBAR === */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 ::-webkit-scrollbar-thumb {
   background: #d1c8c0;
   border-radius: 100px;
 }
-::-webkit-scrollbar-thumb:hover { background: #b91c1c; }
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b91c1c;
+}
 
 /* === PRINT STYLES === */
 @media print {
@@ -175,7 +379,7 @@
   }
 
   /* Ocultar barra lateral, cabecera y elementos no deseados */
-  header, 
+  header,
   aside,
   nav,
   .print\:hidden,
