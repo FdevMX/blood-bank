@@ -1,14 +1,15 @@
 "use client";
 
 import { Session } from "next-auth";
-import { Bell, Search, Sparkles } from "lucide-react";
+import { Bell, Search, Sparkles, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface HeaderProps {
   session: Session | null;
+  onMenuClick?: () => void;
 }
 
-export function Header({ session }: HeaderProps) {
+export function Header({ session, onMenuClick }: HeaderProps) {
   const [time, setTime] = useState("");
   const [dateStr, setDateStr] = useState("");
 
@@ -28,9 +29,17 @@ export function Header({ session }: HeaderProps) {
   }, []);
 
   return (
-    <header className="flex h-14 items-center justify-between px-6 lg:px-8 shrink-0 bg-background/80 backdrop-blur-md">
+    <header className="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 bg-background/80 backdrop-blur-md">
       {/* Left */}
-      <p className="text-sm text-muted-foreground capitalize hidden sm:block font-medium">{dateStr}</p>
+      <div className="flex items-center gap-3">
+        <button 
+          onClick={onMenuClick} 
+          className="p-2 rounded-md hover:bg-white/5 text-muted-foreground hover:text-white transition-colors border border-border/10 shadow-sm"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+        <p className="text-sm text-muted-foreground capitalize hidden sm:block font-medium">{dateStr}</p>
+      </div>
 
       {/* Right */}
       <div className="flex items-center gap-2">

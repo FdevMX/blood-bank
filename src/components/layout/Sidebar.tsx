@@ -37,7 +37,7 @@ const rolBadge: Record<string, { label: string; bg: string; text: string }> = {
   consulta: { label: "Consulta", bg: "bg-sky-500", text: "text-white" },
 };
 
-export function Sidebar() {
+export function Sidebar({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname();
   const { data: session, status } = useSession();
 
@@ -67,14 +67,14 @@ export function Sidebar() {
       <nav className="flex-1 overflow-y-auto px-3 space-y-5 pb-4">
         <NavSection label="Menú">
           {menuItems.map((item) => (
-            <NavLink key={item.href} item={item} pathname={pathname} />
+            <NavLink key={item.href} item={item} pathname={pathname} onClose={onClose} />
           ))}
         </NavSection>
 
         {isAdmin && (
           <NavSection label="Configuración">
             {configItems.map((item) => (
-              <NavLink key={item.href} item={item} pathname={pathname} />
+              <NavLink key={item.href} item={item} pathname={pathname} onClose={onClose} />
             ))}
           </NavSection>
         )}
@@ -82,7 +82,7 @@ export function Sidebar() {
         {isAdmin && (
           <NavSection label="Seguridad">
             {adminItems.map((item) => (
-              <NavLink key={item.href} item={item} pathname={pathname} />
+              <NavLink key={item.href} item={item} pathname={pathname} onClose={onClose} />
             ))}
           </NavSection>
         )}
@@ -135,10 +135,10 @@ function NavSection({ label, children }: { label: string; children: React.ReactN
   );
 }
 
-function NavLink({ item, pathname }: { item: (typeof menuItems)[0]; pathname: string }) {
+function NavLink({ item, pathname, onClose }: { item: (typeof menuItems)[0]; pathname: string; onClose?: () => void }) {
   const active = pathname === item.href || pathname.startsWith(item.href + "/");
   return (
-    <Link href={item.href}>
+    <Link href={item.href} onClick={onClose}>
       <div
         className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 ${
           active
