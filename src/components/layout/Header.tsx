@@ -4,6 +4,8 @@ import { Session } from "next-auth";
 import { Bell, Search, Sparkles, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SearchModal } from "./SearchModal";
+import { NotificationsPanel } from "./NotificationsPanel";
+import { obtenerNotificaciones } from "@/app/actions/notificaciones";
 
 interface HeaderProps {
   session: Session | null;
@@ -14,6 +16,8 @@ export function Header({ session, onMenuClick }: HeaderProps) {
   const [time, setTime] = useState("");
   const [dateStr, setDateStr] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [notifCount, setNotifCount] = useState(0);
 
   useEffect(() => {
     const tick = () => {
@@ -42,6 +46,12 @@ export function Header({ session, onMenuClick }: HeaderProps) {
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
 
+  useEffect(() => {
+    obtenerNotificaciones()
+      .then((n) => setNotifCount(n.length))
+      .catch(() => {});
+  }, []);
+
   return (
     <>
       <header className="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 bg-background/80 backdrop-blur-md">
@@ -61,7 +71,7 @@ export function Header({ session, onMenuClick }: HeaderProps) {
         {/* Search */}
         <button
           onClick={() => setSearchOpen(true)}
-          className="flex h-9 items-center gap-2 rounded-full bg-[#1a1210]/[0.04] px-4 text-sm text-muted-foreground hover:bg-[#1a1210]/[0.08] transition-colors"
+          className="flex h-9 items-center gap-2 rounded-full bg-[#1a1210]/4 px-4 text-sm text-muted-foreground hover:bg-[#1a1210]/8 transition-colors"
         >
           <Search className="h-3.5 w-3.5" />
           <span className="hidden sm:inline text-[13px]">Buscar...</span>
@@ -69,9 +79,14 @@ export function Header({ session, onMenuClick }: HeaderProps) {
         </button>
 
         {/* Notifications */}
-        <button className="relative h-9 w-9 rounded-full bg-[#1a1210]/[0.04] flex items-center justify-center text-muted-foreground hover:bg-[#1a1210]/[0.08] transition-colors">
+        <button
+          onClick={() => setNotifOpen(true)}
+          className="relative h-9 w-9 rounded-full bg-[#1a1210]/4 flex items-center justify-center text-muted-foreground hover:bg-[#1a1210]/8 transition-colors"
+        >
           <Bell className="h-4 w-4" />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 anim-pulse-dot" />
+          {notifCount > 0 && (
+            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 anim-pulse-dot" />
+          )}
         </button>
 
         {/* Clock */}
@@ -82,6 +97,7 @@ export function Header({ session, onMenuClick }: HeaderProps) {
     </header>
 
       <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <NotificationsPanel open={notifOpen} onClose={() => setNotifOpen(false)} />
     </>
   );
 }
