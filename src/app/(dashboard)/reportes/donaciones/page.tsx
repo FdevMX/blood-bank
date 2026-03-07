@@ -135,7 +135,7 @@ export default function ReporteDonacionesPage() {
 
       {/* ── Vista Previa ── */}
       {resultado && (
-        <div className="bg-white rounded-none sm:rounded-3xl p-6 sm:p-10 shadow-sm border sm:border-border/50 bg-white print:p-0 print:border-none print:shadow-none min-h-[500px] anim-fade-up">
+        <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-border/50 print:p-0 print:border-none print:shadow-none min-h-[500px] anim-fade-up">
           
           <div className="flex justify-between items-start mb-8 print:mb-4 border-b pb-6 print:pb-4 border-black/10">
             <div>
@@ -190,39 +190,41 @@ export default function ReporteDonacionesPage() {
 
           {/* Table */}
           <h3 className="text-black font-bold uppercase tracking-widest text-xs mb-3">Listado Detallado de Registros</h3>
-          <table className="w-full text-sm text-left border-collapse">
-            <thead>
-              <tr className="border-y-2 border-black/20 text-black font-bold bg-black/5 print:bg-transparent">
-                <th className="py-3 px-2">Código Lote</th>
-                <th className="py-3 px-2">Recolección</th>
-                <th className="py-3 px-2">Donante</th>
-                <th className="py-3 px-2">Grupo</th>
-                <th className="py-3 px-2">Clasificación</th>
-                <th className="py-3 px-2 text-right">Cantidad</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-black/10">
-              {resultado.donaciones.map((d: any) => (
-                <tr key={d.id} className="hover:bg-black/5 print:hover:bg-transparent transition-colors">
-                  <td className="py-2.5 px-2 font-mono font-bold text-xs">{d.codigo}</td>
-                  <td className="py-2.5 px-2">{formatDateSafe(d.fecha)}</td>
-                  <td className="py-2.5 px-2 truncate max-w-[200px]">{d.donante.nombres} {d.donante.apellidos}</td>
-                  <td className="py-2.5 px-2">
-                    <span className="bg-red-50 text-red-700 font-bold px-1.5 py-0.5 rounded shadow-sm text-xs print:border print:border-black/20 print:bg-transparent print:text-black">{d.grupoSanguineo?.grupo || "S/R"}</span>
-                  </td>
-                  <td className="py-2.5 px-2 text-xs">{d.clasificacion?.nombre || "-"}</td>
-                  <td className="py-2.5 px-2 text-right font-mono text-xs">{Number(d.cantidadMl)}mL</td>
+          <div className="overflow-x-auto w-full pb-4">
+            <table className="w-full text-sm text-left border-collapse min-w-[700px]">
+              <thead>
+                <tr className="border-y-2 border-black/20 text-black font-bold bg-black/5 print:bg-transparent">
+                  <th className="py-3 px-2">Código Lote</th>
+                  <th className="py-3 px-2">Recolección</th>
+                  <th className="py-3 px-2">Donante</th>
+                  <th className="py-3 px-2">Grupo</th>
+                  <th className="py-3 px-2">Clasificación</th>
+                  <th className="py-3 px-2 text-right">Cantidad</th>
                 </tr>
-              ))}
-              {resultado.donaciones.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="text-center py-8 text-black/50 italic">
-                    No hubo recolecciones registradas en este período.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-black/10">
+                {resultado.donaciones.map((d: any) => (
+                  <tr key={d.id} className="hover:bg-black/5 print:hover:bg-transparent transition-colors">
+                    <td className="py-2.5 px-2 font-mono font-bold text-xs">{d.codigo}</td>
+                    <td className="py-2.5 px-2">{formatDateSafe(d.fecha)}</td>
+                    <td className="py-2.5 px-2 truncate max-w-[200px]">{d.donante.nombres} {d.donante.apellidos}</td>
+                    <td className="py-2.5 px-2">
+                      <span className="bg-red-50 text-red-700 font-bold px-1.5 py-0.5 rounded shadow-sm text-xs print:border print:border-black/20 print:bg-transparent print:text-black">{d.grupoSanguineo?.grupo || "S/R"}</span>
+                    </td>
+                    <td className="py-2.5 px-2 text-xs">{d.clasificacion?.nombre || "-"}</td>
+                    <td className="py-2.5 px-2 text-right font-mono text-xs">{Number(d.cantidadMl)}mL</td>
+                  </tr>
+                ))}
+                {resultado.donaciones.length === 0 && (
+                  <tr>
+                    <td colSpan={6} className="text-center py-8 text-black/50 italic">
+                      No hubo recolecciones registradas en este período.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
           
           {/* Footer Print Only */}
           <div className="hidden print:block text-center text-xs text-black/50 mt-12 pt-4 border-t border-black/10">
