@@ -331,13 +331,13 @@ export default function Home() {
               </div>
             </div>
             
-            <div className="relative lg:h-[600px] flex items-center justify-center">
+            <div className="relative lg:h-[600px] flex items-center justify-center px-4 mt-12 lg:px-0 lg:mt-0">
               {/* Interactive Floating Elements */}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)] rounded-3xl" />
               
               <div className="relative z-10 w-full max-w-md">
                 {/* Floating Card 1 */}
-                <div className="absolute -top-20 -left-10 bg-[#221816]/80 border border-white/10 rounded-2xl p-5 backdrop-blur-xl animate-[float_6s_ease-in-out_infinite] shadow-2xl z-20 w-64">
+                <div className="absolute -top-10 sm:-top-20 -left-2 sm:-left-10 bg-[#221816]/80 border border-white/10 rounded-2xl p-4 sm:p-5 backdrop-blur-xl animate-[float_6s_ease-in-out_infinite] shadow-2xl z-20 w-52 sm:w-64">
                   <div className="flex justify-between items-center border-b border-white/10 pb-3 mb-3">
                     <div className="flex items-center gap-2">
                       <Shield className="h-4 w-4 text-emerald-400" />
@@ -366,7 +366,7 @@ export default function Home() {
                 </div>
 
                 {/* Floating Card 2 */}
-                <div className="absolute -bottom-10 -right-10 bg-[#221816]/80 border border-white/10 rounded-2xl p-5 backdrop-blur-xl animate-[float_7s_ease-in-out_infinite_1s] shadow-2xl z-20 w-72">
+                <div className="absolute -bottom-5 sm:-bottom-10 -right-2 sm:-right-10 bg-[#221816]/80 border border-white/10 rounded-2xl p-4 sm:p-5 backdrop-blur-xl animate-[float_7s_ease-in-out_infinite_1s] shadow-2xl z-20 w-56 sm:w-72">
                   <div className="flex items-center gap-3 mb-3">
                     <Activity className="h-4 w-4 text-orange-400" />
                     <span className="font-bold text-sm">Validación Serológica</span>
