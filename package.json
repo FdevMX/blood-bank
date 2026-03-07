@@ -10,9 +10,6 @@
     "seed": "tsx prisma/seed.ts",
     "postinstall": "prisma generate"
   },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
     "@types/bcryptjs": "^2.4.6",
