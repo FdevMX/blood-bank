@@ -19,7 +19,12 @@ export default auth((req) => {
 
   // Permitir otras rutas públicas por prefijo
   const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
-  if (isPublicRoute) return NextResponse.next();
+  if (isPublicRoute) {
+    if (pathname === "/login" && req.auth) {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+    return NextResponse.next();
+  }
 
   // Redirigir si no hay sesión
   if (!req.auth) {
