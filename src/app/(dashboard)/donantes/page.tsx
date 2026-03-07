@@ -3,6 +3,7 @@ import { Plus, Search, FileText, ChevronRight, UserCircle2 } from "lucide-react"
 import { getDonantes } from "@/app/actions/donantes";
 import { auth } from "@/lib/auth";
 import { formatDateSafe } from "@/lib/utils";
+import { LiveSearch } from "@/components/ui/LiveSearch";
 
 export const dynamic = "force-dynamic";
 
@@ -48,18 +49,7 @@ export default async function DonantesPage(
 
       {/* ── Search Bar ── */}
       <div className="rounded-3xl bg-white p-2 shadow-sm border border-border/50 flex">
-        <form action="/donantes" className="flex-1 relative flex items-center h-12">
-          {currentTab !== "Todos" && <input type="hidden" name="tab" value={currentTab} />}
-          <Search className="absolute left-4 h-5 w-5 text-muted-foreground" />
-          <input
-            type="search"
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar por código, nombre completo, o documento de identidad..."
-            className="w-full h-full bg-transparent pl-12 pr-4 outline-none text-[15px] placeholder:text-muted-foreground"
-          />
-          <button type="submit" className="hidden">Buscar</button>
-        </form>
+        <LiveSearch placeholder="Buscar por código, nombre completo, o documento de identidad..." />
       </div>
 
       {/* ── Tabs ── */}

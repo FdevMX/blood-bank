@@ -24,27 +24,30 @@ export default async function DonanteDetallePage({ params }: { params: Promise<{
   return (
     <div className="max-w-7xl mx-auto space-y-6 pb-20 anim-fade-up d1">
       {/* ── Navbar Contextual ── */}
-      <div className="flex items-center gap-4 border-b border-border/50 pb-5">
-        <Link href="/donantes" className="h-10 w-10 flex items-center justify-center rounded-xl bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground transition-all">
-          <ArrowLeft className="h-4 w-4" />
-        </Link>
-        <div className="flex-1">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-teal-600 mb-0.5">Expediente Médico Completo</p>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-extrabold text-foreground">{donante.nombres} {donante.apellidos}</h1>
-            <span className="text-[10px] font-bold uppercase tracking-widest bg-muted px-2 py-0.5 rounded-md text-muted-foreground ml-2">
-              {donante.codigo}
-            </span>
-            {inactivo && (
-               <span className="text-[10px] font-bold uppercase tracking-widest text-red-600 bg-red-50 border border-red-100 px-2 py-0.5 rounded-md flex items-center gap-1">
-                 <span className="h-1.5 w-1.5 rounded-full bg-red-500 anim-pulse-dot" /> INACTIVO
-               </span>
-            )}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 border-b border-border/50 pb-5">
+        <div className="flex items-start md:items-center gap-4 w-full md:w-auto">
+          <Link href="/donantes" className="mt-1 md:mt-0 h-10 w-10 flex shrink-0 items-center justify-center rounded-xl bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground transition-all">
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-teal-600 mb-0.5">Expediente Médico Completo</p>
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-extrabold text-foreground leading-tight">{donante.nombres} {donante.apellidos}</h1>
+              <span className="text-[10px] font-bold uppercase tracking-widest bg-muted px-2 py-0.5 rounded-md text-muted-foreground whitespace-nowrap">
+                {donante.codigo}
+              </span>
+              {inactivo && (
+                 <span className="text-[10px] font-bold uppercase tracking-widest text-red-600 bg-red-50 border border-red-100 px-2 py-0.5 rounded-md flex items-center gap-1 whitespace-nowrap">
+                   <span className="h-1.5 w-1.5 rounded-full bg-red-500 anim-pulse-dot" /> INACTIVO
+                 </span>
+              )}
+            </div>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <form action={async () => { "use server"; await toggleEstadoDonante(donante.id); }}>
-            <button className={`px-4 py-2 text-sm font-bold rounded-xl border transition-all ${
+        
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto sm:ml-auto">
+          <form action={async () => { "use server"; await toggleEstadoDonante(donante.id); }} className="w-full sm:w-auto">
+            <button className={`w-full justify-center px-4 py-2 text-sm font-bold rounded-xl border transition-all flex items-center shadow-sm ${
               inactivo 
                 ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100" 
                 : "bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100"
@@ -52,11 +55,13 @@ export default async function DonanteDetallePage({ params }: { params: Promise<{
               {inactivo ? "Reactivar Perfil" : "Desactivar Perfil"}
             </button>
           </form>
-          <Link href={`/donantes/${donante.id}/editar`} className="px-5 py-2 text-sm font-bold bg-[#1a1210] text-white hover:bg-[#2d1a14] rounded-xl transition-all shadow-lg flex items-center gap-2">
+          <Link href={`/donantes/${donante.id}/editar`} className="w-full sm:w-auto flex justify-center px-5 py-2 text-sm font-bold bg-[#1a1210] text-white hover:bg-[#2d1a14] rounded-xl transition-all shadow-lg items-center gap-2">
             <Settings2 className="h-4 w-4" /> Editar
           </Link>
           {isAdmin && (
-            <DeleteDonanteButton id={donante.id} nombre={`${donante.nombres} ${donante.apellidos}`} />
+            <div className="w-full sm:w-auto flex justify-center">
+              <DeleteDonanteButton id={donante.id} nombre={`${donante.nombres} ${donante.apellidos}`} />
+            </div>
           )}
         </div>
       </div>
