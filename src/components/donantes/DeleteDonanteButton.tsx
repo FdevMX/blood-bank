@@ -27,10 +27,10 @@ export function DeleteDonanteButton({ id, nombre }: { id: number; nombre: string
     return (
       <button 
         onClick={() => setConfirming(true)}
-        className="px-4 py-2 text-sm font-bold bg-muted hover:bg-rose-50 border border-transparent hover:border-rose-200 hover:text-rose-700 rounded-xl transition-all flex items-center gap-2"
+        className="w-full sm:w-auto px-5 py-2 text-sm font-bold bg-muted hover:bg-rose-50 border border-transparent hover:border-rose-200 hover:text-rose-700 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm"
         title="Eliminar Expediente Físicamente"
       >
-        <Trash2 className="h-4 w-4" />
+        <Trash2 className="h-4 w-4" /> Eliminar
       </button>
     );
   }
