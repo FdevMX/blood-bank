@@ -14,12 +14,35 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXTAUTH_URL!),
   title: {
     default: "Banco de Sangre — Sistema de Gestión",
     template: "%s | Banco de Sangre",
   },
   description:
     "Sistema integral de gestión de donantes, donaciones e inventario de sangre. Plataforma segura bajo estándares OWASP.",
+  openGraph: {
+    type: "website",
+    siteName: "Banco de Sangre",
+    title: "Banco de Sangre — Sistema de Gestión",
+    description:
+      "Sistema integral de gestión de donantes, donaciones e inventario de sangre. Plataforma segura bajo estándares OWASP.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Banco de Sangre — Sistema de Gestión",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Banco de Sangre — Sistema de Gestión",
+    description:
+      "Sistema integral de gestión de donantes, donaciones e inventario de sangre. Plataforma segura bajo estándares OWASP.",
+    images: ["/opengraph-image"],
+  },
 };
 
 export default function RootLayout({
