@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { LiveSearch } from "@/components/ui/LiveSearch";
 
 export const dynamic = "force-dynamic";
 
@@ -73,46 +74,11 @@ export default async function AuditoriaPage({
             )}
           </p>
         </div>
-        {q && (
-          <a
-            href="/auditoria"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-muted text-sm font-bold text-muted-foreground hover:bg-muted/80 transition-all border border-border/30 shrink-0"
-          >
-            Limpiar filtro
-          </a>
-        )}
       </div>
 
       {/* Search Bar */}
       <div className="rounded-3xl bg-white p-2 shadow-sm border border-border/50 flex">
-        <form
-          action="/auditoria"
-          method="GET"
-          className="flex-1 relative flex items-center h-12 gap-2"
-        >
-          <Search className="absolute left-4 h-5 w-5 text-muted-foreground pointer-events-none" />
-          <input
-            type="search"
-            name="q"
-            defaultValue={q}
-            placeholder="Buscar por tabla, IP, usuario o tipo de accion (CREATE, UPDATE, DELETE, LOGIN)..."
-            className="w-full h-full bg-transparent pl-12 pr-4 outline-none text-[15px] font-medium placeholder:text-muted-foreground/60 transition-all"
-          />
-          <button
-            type="submit"
-            className="shrink-0 h-9 px-5 rounded-2xl bg-gradient-to-br from-teal-600 to-teal-700 text-white text-xs font-bold hover:from-teal-500 hover:to-teal-600 transition-all shadow-sm mr-1"
-          >
-            Buscar
-          </button>
-          {q && (
-            <a
-              href="/auditoria"
-              className="shrink-0 h-9 px-4 rounded-2xl bg-muted text-muted-foreground text-xs font-bold hover:bg-muted/80 transition-all flex items-center mr-1"
-            >
-              Limpiar
-            </a>
-          )}
-        </form>
+        <LiveSearch placeholder="Buscar por tabla, IP, usuario o tipo de accion (CREATE, UPDATE, DELETE, LOGIN)..." />
       </div>
 
       {/* Event Timeline */}
@@ -125,98 +91,93 @@ export default async function AuditoriaPage({
             </h3>
           </div>
         ) : (
-          <div className="relative border-l border-dashed border-border/60 ml-3 space-y-8 pb-4">
-            {logs.map((log: any) => {
-              const st = getActionStyles(log.accion);
-              const fechaFormatted = format(new Date(log.fecha), "dd MMM yyyy", { locale: es });
-              const horaFormatted = format(new Date(log.fecha), "HH:mm");
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left align-middle border-collapse">
+              <thead>
+                <tr className="border-b border-border/50 text-xs text-muted-foreground uppercase tracking-wider">
+                  <th className="font-semibold py-3 px-4">Fecha / Hora</th>
+                  <th className="font-semibold py-3 px-4">Acción</th>
+                  <th className="font-semibold py-3 px-4">Usuario</th>
+                  <th className="font-semibold py-3 px-4">IP / UID</th>
+                  <th className="font-semibold py-3 px-4">Registro Afectado</th>
+                  <th className="font-semibold py-3 px-4 text-right">Detalle</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border/50">
+                {logs.map((log: any) => {
+                  const st = getActionStyles(log.accion);
+                  const fechaFormatted = format(new Date(log.fecha), "dd MMM yyyy", { locale: es });
+                  const horaFormatted = format(new Date(log.fecha), "HH:mm");
 
-              return (
-                <div key={log.id} className="relative pl-8 pt-1">
-                  {/* Timeline dot */}
-                  <div className="absolute -left-1.5 top-2 h-3 w-3 rounded-full bg-white border-[3px] border-slate-800" />
-
-                  <div className="bg-muted/10 rounded-2xl border border-border/50 p-5 hover:bg-muted/20 transition-colors">
-                    <div className="flex justify-between items-start mb-4 gap-4">
-                      {/* Left: icon + user + action */}
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div
-                          className={`h-10 w-10 flex border items-center justify-center rounded-xl shadow-sm shrink-0 ${st.color}`}
-                        >
-                          <st.icon className="h-5 w-5" />
+                  return (
+                    <tr key={log.id} className="hover:bg-muted/30 transition-colors">
+                      <td className="py-3 px-4 whitespace-nowrap">
+                        <p className="font-bold text-foreground text-xs">{fechaFormatted}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{horaFormatted} hrs</p>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-2">
+                           <div className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 border ${st.color}`}>
+                             <st.icon className="h-4 w-4" />
+                           </div>
+                           <span className={`px-2 py-0.5 text-[9px] rounded-md font-black uppercase tracking-widest ${st.color}`}>
+                             {log.accion}
+                           </span>
                         </div>
-                        <div className="min-w-0">
-                          <p className="text-sm font-bold flex items-center gap-2 flex-wrap">
-                            <span className="truncate">
-                              {log.usuario ? log.usuario.nombreUsuario : "Sistema"}
-                            </span>
-                            <span
-                              className={`px-2 py-0.5 text-[9px] rounded-md font-black uppercase tracking-widest shrink-0 ${st.color}`}
-                            >
-                              {log.accion}
-                            </span>
-                          </p>
-                          <p className="text-xs font-semibold text-muted-foreground mt-0.5">
-                            IP:{" "}
-                            <span className="font-mono text-[10px] bg-muted px-1.5 py-0.5 rounded">
-                              {log.ipAddress || "Interna"}
-                            </span>{" "}
-                            &bull; UID: {log.idUsuario ?? "SYS"}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Right: date/time — STATIC, no locale-dependent calls */}
-                      <div className="text-right shrink-0">
-                        <p className="text-[11px] font-black uppercase text-foreground/50 tracking-wider">
-                          {fechaFormatted}
-                        </p>
-                        <p className="text-xs font-semibold text-muted-foreground mt-0.5">
-                          {horaFormatted} hrs
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Tabla afectada */}
-                    {log.tablaAfectada && (
-                      <div className="flex items-center gap-2 bg-white rounded-xl py-3 px-4 border border-border/50 shadow-sm text-sm">
-                        <FileBox className="h-4 w-4 text-muted-foreground shrink-0" />
-                        <span className="text-muted-foreground font-semibold">Registro:</span>
-                        <span className="font-bold font-mono text-[13px] text-teal-700 bg-teal-50 px-2 py-0.5 rounded-md">
-                          /{log.tablaAfectada}/{log.registroId ?? "-"}
+                      </td>
+                      <td className="py-3 px-4 font-bold text-sm max-w-[150px] truncate" title={log.usuario ? log.usuario.nombreUsuario : "Sistema"}>
+                        {log.usuario ? log.usuario.nombreUsuario : "Sistema"}
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="font-mono text-[10px] bg-muted px-1.5 py-0.5 rounded mr-1">
+                          {log.ipAddress || "Interna"}
                         </span>
-                      </div>
-                    )}
-
-                    {/* JSON diff */}
-                    {(log.datosAnteriores || log.datosNuevos) && (
-                      <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {log.datosAnteriores && (
-                          <div className="bg-red-50/50 border border-red-100 rounded-xl p-3 max-h-32 overflow-y-auto">
-                            <p className="text-[10px] uppercase font-bold text-red-500 mb-1">
-                              Datos Anteriores
-                            </p>
-                            <pre className="text-[10px] font-mono text-red-800/80">
-                              {JSON.stringify(log.datosAnteriores, null, 2)}
-                            </pre>
+                        <div className="text-[10px] text-muted-foreground font-semibold mt-0.5">UID: {log.idUsuario ?? "SYS"}</div>
+                      </td>
+                      <td className="py-3 px-4">
+                        {log.tablaAfectada ? (
+                          <div className="flex flex-col gap-0.5">
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase">{log.tablaAfectada}</span>
+                            <span className="font-mono text-xs text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded w-fit">ID: {log.registroId ?? "-"}</span>
                           </div>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
                         )}
-                        {log.datosNuevos && (
-                          <div className="bg-emerald-50/50 border border-emerald-100 rounded-xl p-3 max-h-32 overflow-y-auto">
-                            <p className="text-[10px] uppercase font-bold text-emerald-600 mb-1">
-                              Datos Nuevos
-                            </p>
-                            <pre className="text-[10px] font-mono text-emerald-800/80">
-                              {JSON.stringify(log.datosNuevos, null, 2)}
-                            </pre>
-                          </div>
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        {(log.datosAnteriores || log.datosNuevos) ? (
+                          <details className="group inline-block text-left cursor-pointer z-10">
+                            <summary className="text-[11px] font-bold bg-muted hover:bg-muted/80 px-2 py-1 rounded text-foreground transition-all select-none">
+                              Ver Payloads
+                            </summary>
+                            <div className="absolute right-8 mt-2 w-80 bg-white border border-border/50 shadow-2xl rounded-2xl p-4 cursor-auto z-50 pointer-events-auto shadow-[0_10px_40px_rgba(0,0,0,0.1)]">
+                              {log.datosAnteriores && (
+                                <div className="bg-red-50/50 border border-red-100 rounded-xl p-2 max-h-40 overflow-y-auto mb-2 text-left">
+                                  <p className="text-[9px] uppercase font-bold text-red-500 mb-1">Pre-Cambio</p>
+                                  <pre className="text-[10px] font-mono text-red-800/80 w-full overflow-x-auto">
+                                    {JSON.stringify(log.datosAnteriores, null, 2)}
+                                  </pre>
+                                </div>
+                              )}
+                              {log.datosNuevos && (
+                                <div className="bg-emerald-50/50 border border-emerald-100 rounded-xl p-2 max-h-40 overflow-y-auto text-left">
+                                  <p className="text-[9px] uppercase font-bold text-emerald-600 mb-1">Nuevo Payload</p>
+                                  <pre className="text-[10px] font-mono text-emerald-800/80 w-full overflow-x-auto">
+                                    {JSON.stringify(log.datosNuevos, null, 2)}
+                                  </pre>
+                                </div>
+                              )}
+                            </div>
+                          </details>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
                         )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
