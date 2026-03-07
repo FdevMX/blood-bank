@@ -19,6 +19,7 @@ import {
   MoreVertical,
   AlertCircle,
   Loader2,
+  Search,
 } from "lucide-react";
 import {
   crearUsuario,
@@ -195,15 +196,24 @@ export function UsuariosTable({ initialUsers }: { initialUsers: UsuarioItem[] })
     <div className="space-y-6">
       {/* ── Sub Header / Search ── */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
-        <div className="relative flex-1 max-w-md">
-          <Settings2 className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <div className="relative flex-1 max-w-md flex items-center bg-white rounded-2xl border border-border/50 shadow-sm focus-within:border-red-500/30 transition-all h-12">
+          <Search className="absolute left-4 h-4 w-4 text-muted-foreground pointer-events-none" />
           <input
             type="search"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar usuario por nombre o correo..."
-            className="w-full bg-white rounded-2xl h-12 pl-12 pr-4 text-[13px] font-medium outline-none border border-border/50 shadow-sm focus:border-red-500/30 transition-all placeholder:text-muted-foreground/60"
+            className="w-full h-full bg-transparent pl-11 pr-24 text-[13px] font-medium outline-none placeholder:text-muted-foreground/60 rounded-2xl"
           />
+          {busqueda && (
+            <button
+              onClick={() => setBusqueda("")}
+              type="button"
+              className="absolute right-2 h-8 px-3 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-[10px] font-bold text-rose-600 hover:bg-rose-100 shadow-sm transition-all"
+            >
+              Limpiar
+            </button>
+          )}
         </div>
 
         <button
@@ -264,10 +274,10 @@ export function UsuariosTable({ initialUsers }: { initialUsers: UsuarioItem[] })
 
               {/* Actions Dropdown */}
               <div className="relative group">
-                <button className="h-8 w-8 rounded-full flex items-center justify-center hover:bg-muted text-muted-foreground transition-colors">
-                  <MoreVertical className="h-4 w-4" />
+                <button className="peer h-8 w-8 rounded-full flex items-center justify-center hover:bg-muted text-muted-foreground transition-colors focus:bg-muted focus:text-foreground">
+                  <MoreVertical className="h-4 w-4 pointer-events-none" />
                 </button>
-                <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-xl border border-border/50 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20 origin-top-right scale-95 group-hover:scale-100">
+                <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-xl border border-border/50 p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible peer-focus:opacity-100 peer-focus:visible focus-within:opacity-100 focus-within:visible transition-all z-50 origin-top-right scale-95 group-hover:scale-100 peer-focus:scale-100 focus-within:scale-100">
                   <Link
                     href={`/usuarios/${u.id}`}
                     className="w-full text-left px-4 py-2 text-sm font-semibold rounded-xl hover:bg-muted text-foreground transition-colors flex items-center gap-2"
