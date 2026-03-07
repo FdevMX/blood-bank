@@ -28,9 +28,7 @@ export default auth((req) => {
 
   // Redirigir si no hay sesión
   if (!req.auth) {
-    const loginUrl = new URL("/login", req.url);
-    loginUrl.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   const token = req.auth.user as any;
