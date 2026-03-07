@@ -1,14 +1,204 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
+}
+
+enum Rol {
+  administrador
+  operador
+  consulta
+}
+
+enum EstadoUsuario {
+  activo
+  inactivo
+}
+
+enum Sexo {
+  MASCULINO
+  FEMENINO
+}
+
+enum EstadoDonante {
+  activo
+  inactivo
+}
+
+enum EstadoDonacion {
+  disponible
+  utilizada
+  descartada
+  vencida
+}
+
+enum AccionAuditoria {
+  LOGIN
+  LOGOUT
+  CREATE
+  UPDATE
+  DELETE
+  VIEW
+}
+
+model Usuario {
+  id             Int           @id @default(autoincrement())
+  nombreUsuario  String        @map("nombre_usuario") @db.VarChar(100)
+  email          String        @unique @db.VarChar(150)
+  passwordHash   String?       @map("password_hash") @db.VarChar(255)
+  rol            Rol
+  estado         EstadoUsuario @default(activo)
+  fechaCreacion  DateTime      @default(now()) @map("fecha_creacion")
+  ultimoAcceso   DateTime?     @map("ultimo_acceso")
+
+  donaciones Donacion[]
+  auditorias Auditoria[]
+
+  @@map("usuario")
+}
+
+model GrupoSanguineo {
+  id          Int     @id @default(autoincrement())
+  grupo       String  @unique @db.VarChar(5)
+  descripcion String? @db.Text
+  activo      Boolean @default(true)
+
+  donantes   Donante[]
+  donaciones Donacion[]
+
+  @@map("grupo_sanguineo")
+}
+
+model TipoDonante {
+  id          Int     @id @default(autoincrement())
+  nombre      String  @unique @db.VarChar(50)
+  descripcion String? @db.Text
+  activo      Boolean @default(true)
+
+  donantes   Donante[]
+  donaciones Donacion[]
+
+  @@map("tipo_donante")
+}
+
+model ClasificacionDonacion {
+  id          Int     @id @default(autoincrement())
+  nombre      String  @unique @db.VarChar(50)
+  descripcion String? @db.Text
+  activo      Boolean @default(true)
+
+  donaciones Donacion[]
+
+  @@map("clasificacion_donacion")
+}
+
+model EnfermedadReciente {
+  id          Int     @id @default(autoincrement())
+  nombre      String  @unique @db.VarChar(100)
+  descripcion String? @db.Text
+  activo      Boolean @default(true)
+
+  donantes DonanteEnfermedad[]
+
+  @@map("enfermedad_reciente")
+}
+
+model Donante {
+  id                   Int           @id @default(autoincrement())
+  codigo               String        @unique @db.VarChar(25)
+  nombres              String        @db.VarChar(50)
+  apellidos            String        @db.VarChar(50)
+  documentoIdentidad   String?       @unique @map("documento_identidad") @db.VarChar(20)
+  fechaNacimiento      DateTime?     @map("fecha_nacimiento") @db.Date
+  sexo                 Sexo
+  ocupacion            String?       @db.VarChar(50)
+  centroTrabajo        String?       @map("centro_trabajo") @db.VarChar(100)
+  direccion            String?       @db.Text
+  municipio            String?       @db.VarChar(50)
+  departamento         String?       @db.VarChar(50)
+  telefono             String?       @db.VarChar(15)
+  email                String?       @db.VarChar(150)
+  temperatura          Decimal?      @db.Decimal(4, 1)
+  idTipoDonante        Int?          @map("id_tipo_donante")
+  idGrupoSanguineo     Int?          @map("id_grupo_sanguineo")
+  fechaUltimaDonacion  DateTime?     @map("fecha_ultima_donacion") @db.Date
+  transfusionesPrevias Boolean       @default(false) @map("transfusiones_previas")
+  donacionesPrevias    Boolean       @default(false) @map("donaciones_previas")
+  estado               EstadoDonante @default(activo)
+  fechaRegistro        DateTime      @default(now()) @map("fecha_registro")
+  ultimaModificacion   DateTime?     @updatedAt @map("ultima_modificacion")
+
+  tipoDonante    TipoDonante?        @relation(fields: [idTipoDonante], references: [id])
+  grupoSanguineo GrupoSanguineo?     @relation(fields: [idGrupoSanguineo], references: [id])
+  enfermedades   DonanteEnfermedad[]
+  donaciones     Donacion[]
+
+  @@map("donante")
+}
+
+model Donacion {
+  id                Int            @id @default(autoincrement())
+  codigo            String         @unique @db.VarChar(25)
+  idDonante         Int            @map("id_donante")
+  hora              DateTime       @db.Time
+  fecha             DateTime       @db.Date
+  cantidadMl        Decimal        @map("cantidad_ml") @db.Decimal(7, 2)
+  idGrupoSanguineo  Int?           @map("id_grupo_sanguineo")
+  idTipoDonante     Int?           @map("id_tipo_donante")
+  idClasificacion   Int?           @map("id_clasificacion")
+  temperatura       Decimal?       @db.Decimal(4, 1)
+  peso              Decimal?       @db.Decimal(5, 2)
+  lso               String?        @db.VarChar(20)
+  hemoglobina       Decimal?       @db.Decimal(5, 2)
+  tensionArterial   String?        @map("tension_arterial") @db.VarChar(15)
+  observaciones     String?        @db.Text
+  estado            EstadoDonacion @default(disponible)
+  fechaVencimiento  DateTime?      @map("fecha_vencimiento") @db.Date
+  ubicacion         String?        @db.VarChar(50)
+  idUsuarioRegistro Int?           @map("id_usuario_registro")
+  fechaRegistro     DateTime       @default(now()) @map("fecha_registro")
+
+  donante         Donante                @relation(fields: [idDonante], references: [id])
+  grupoSanguineo  GrupoSanguineo?        @relation(fields: [idGrupoSanguineo], references: [id])
+  tipoDonante     TipoDonante?           @relation(fields: [idTipoDonante], references: [id])
+  clasificacion   ClasificacionDonacion? @relation(fields: [idClasificacion], references: [id])
+  usuarioRegistro Usuario?               @relation(fields: [idUsuarioRegistro], references: [id])
+
+  @@map("donacion")
+}
+
+model DonanteEnfermedad {
+  id               Int       @id @default(autoincrement())
+  idDonante        Int       @map("id_donante")
+  idEnfermedad     Int       @map("id_enfermedad")
+  fechaDiagnostico DateTime? @map("fecha_diagnostico") @db.Date
+  observaciones    String?   @db.Text
+
+  donante    Donante            @relation(fields: [idDonante], references: [id], onDelete: Cascade)
+  enfermedad EnfermedadReciente @relation(fields: [idEnfermedad], references: [id])
+
+  @@unique([idDonante, idEnfermedad])
+  @@map("donante_enfermedad")
+}
+
+model Auditoria {
+  id              Int             @id @default(autoincrement())
+  idUsuario       Int?            @map("id_usuario")
+  accion          AccionAuditoria
+  tablaAfectada   String?         @map("tabla_afectada") @db.VarChar(50)
+  registroId      Int?            @map("registro_id")
+  datosAnteriores Json?           @map("datos_anteriores")
+  datosNuevos     Json?           @map("datos_nuevos")
+  ipAddress       String?         @map("ip_address") @db.VarChar(45)
+  userAgent       String?         @map("user_agent") @db.Text
+  fecha           DateTime        @default(now())
+
+  usuario Usuario? @relation(fields: [idUsuario], references: [id], onDelete: SetNull)
+
+  @@map("auditoria")
 }
