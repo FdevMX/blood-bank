@@ -196,20 +196,20 @@ export function UsuariosTable({ initialUsers }: { initialUsers: UsuarioItem[] })
     <div className="space-y-6">
       {/* ── Sub Header / Search ── */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
-        <div className="relative flex-1 max-w-md flex items-center bg-white rounded-2xl border border-border/50 shadow-sm focus-within:border-red-500/30 transition-all h-12">
-          <Search className="absolute left-4 h-4 w-4 text-muted-foreground pointer-events-none" />
+        <div className="relative flex-1 max-w-md sm:max-w-none">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
           <input
-            type="search"
+            type="text"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar usuario por nombre o correo..."
-            className="w-full h-full bg-transparent pl-11 pr-24 text-[13px] font-medium outline-none placeholder:text-muted-foreground/60 rounded-2xl"
+            className={`w-full bg-white rounded-2xl h-16 pl-12 text-[16px] font-regular outline-none border border-border/50 shadow-sm focus:border-red-500/30 transition-all placeholder:text-muted-foreground/60 ${busqueda ? "pr-24" : "pr-4"}`}
           />
           {busqueda && (
             <button
               onClick={() => setBusqueda("")}
               type="button"
-              className="absolute right-2 h-8 px-3 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-[10px] font-bold text-rose-600 hover:bg-rose-100 shadow-sm transition-all"
+              className="absolute right-2 top-1/2 -translate-y-1/2 h-8 px-3 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center text-[12px] font-bold text-rose-600 hover:bg-rose-100 shadow-sm transition-all"
             >
               Limpiar
             </button>
@@ -218,7 +218,7 @@ export function UsuariosTable({ initialUsers }: { initialUsers: UsuarioItem[] })
 
         <button
           onClick={() => openForm()}
-          className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 px-6 py-3 text-sm font-bold text-white shadow-xl shadow-red-900/20 transition-all hover:shadow-2xl hover:-translate-y-0.5"
+          className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 px-6 py-5 text-sm font-bold text-white shadow-xl shadow-red-900/20 transition-all hover:shadow-2xl hover:-translate-y-0.5"
         >
           <UserPlus className="h-4 w-4" />
           Invitar Empleado
