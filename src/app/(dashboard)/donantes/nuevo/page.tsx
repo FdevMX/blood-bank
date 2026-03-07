@@ -11,10 +11,10 @@ export default async function NuevoDonantePage() {
     getEnfermedades()
   ]);
 
-  // Filtrar solo registros activos con tipos explícitos
-  type Tipo = Awaited<ReturnType<typeof getTiposDonante>>[number];
-  type Grupo = Awaited<ReturnType<typeof getGruposSanguineos>>[number];
-  type Enfermedad = Awaited<ReturnType<typeof getEnfermedades>>[number];
+  // Filtrar registros activos
+  const tiposActivos = tipos.filter((t) => t.activo);
+  const gruposActivos = grupos.filter((g) => g.activo);
+  const enfermedadesActivas = enfermedades.filter((e) => e.activo);
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 anim-fade-up d1">
@@ -29,9 +29,9 @@ export default async function NuevoDonantePage() {
       </div>
 
       <DonanteForm 
-        tipos={tipos.filter((t: Tipo) => t.activo)} 
-        grupos={grupos.filter((g: Grupo) => g.activo)} 
-        enfermedadesCatalog={enfermedades.filter((e: Enfermedad) => e.activo)} 
+        tipos={tiposActivos} 
+        grupos={gruposActivos} 
+        enfermedadesCatalog={enfermedadesActivas} 
       />
     </div>
   );

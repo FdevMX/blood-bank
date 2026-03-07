@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Droplets, Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
 
-export default function LoginPage() {
+// Componente interno que usa useSearchParams
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
@@ -177,5 +178,18 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Componente wrapper con Suspense para useSearchParams
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-[#1a1210]">
+        <Loader2 className="h-8 w-8 animate-spin text-red-500" />
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }
