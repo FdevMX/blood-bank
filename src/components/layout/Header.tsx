@@ -3,6 +3,7 @@
 import { Session } from "next-auth";
 import { Bell, Search, Sparkles, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
+import { SearchModal } from "./SearchModal";
 
 interface HeaderProps {
   session: Session | null;
@@ -12,6 +13,7 @@ interface HeaderProps {
 export function Header({ session, onMenuClick }: HeaderProps) {
   const [time, setTime] = useState("");
   const [dateStr, setDateStr] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     const tick = () => {
@@ -28,8 +30,21 @@ export function Header({ session, onMenuClick }: HeaderProps) {
     return () => clearInterval(id);
   }, []);
 
+  // Atajo de teclado ⌘K / Ctrl+K
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
   return (
-    <header className="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 bg-background/80 backdrop-blur-md">
+    <>
+      <header className="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0 bg-background/80 backdrop-blur-md">
       {/* Left */}
       <div className="flex items-center gap-3">
         <button 
@@ -44,7 +59,10 @@ export function Header({ session, onMenuClick }: HeaderProps) {
       {/* Right */}
       <div className="flex items-center gap-2">
         {/* Search */}
-        <button className="flex h-9 items-center gap-2 rounded-full bg-[#1a1210]/[0.04] px-4 text-sm text-muted-foreground hover:bg-[#1a1210]/[0.08] transition-colors">
+        <button
+          onClick={() => setSearchOpen(true)}
+          className="flex h-9 items-center gap-2 rounded-full bg-[#1a1210]/[0.04] px-4 text-sm text-muted-foreground hover:bg-[#1a1210]/[0.08] transition-colors"
+        >
           <Search className="h-3.5 w-3.5" />
           <span className="hidden sm:inline text-[13px]">Buscar...</span>
           <kbd className="hidden sm:inline-flex h-5 items-center rounded-md bg-white px-1.5 text-[10px] font-mono text-muted-foreground shadow-sm">⌘K</kbd>
@@ -62,5 +80,8 @@ export function Header({ session, onMenuClick }: HeaderProps) {
         </div>
       </div>
     </header>
+
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
+    </>
   );
 }
