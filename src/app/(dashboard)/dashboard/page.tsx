@@ -102,7 +102,7 @@ export default async function DashboardPage() {
             <Users className="h-5 w-5 mb-3 text-teal-200" />
             <p className="text-3xl font-extrabold tabular-nums">{stats.donantesActivos}</p>
             <p className="text-teal-200/80 text-sm font-medium mt-1">Donantes Activos</p>
-            <p className="text-teal-300/50 text-xs mt-0.5">{stats.totalDonantes} registrados</p>
+            {/* <p className="text-teal-300/50 text-xs mt-0.5">{stats.totalDonantes} registrados</p> */}
           </div>
         </Link>
 
