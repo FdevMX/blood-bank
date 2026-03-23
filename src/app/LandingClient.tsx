@@ -3,12 +3,12 @@ import { useEffect } from "react";
 import Lenis from "@studio-freight/lenis";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { Navbar } from "./components/Navbar";
+import { LandingNavbar } from "./components/LandingNavbar";
 import { HeroSection } from "./sections/HeroSection";
 import { StatsSection } from "./sections/StatsSection";
 import { FeaturesSection } from "./sections/FeaturesSection";
 import { ProcessSection } from "./sections/ProcessSection";
-import { TeamSection } from "./sections/TeamSection";
+import { DashboardSection } from "./sections/DashboardSection";
 import { SecuritySection } from "./sections/SecuritySection";
 import { CtaSection } from "./sections/CtaSection";
 import { Droplets, Github, Heart } from "lucide-react";
@@ -36,56 +36,53 @@ export default function LandingClient() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0e0907] text-white selection:bg-red-500/30 overflow-hidden font-sans">
-      <Navbar />
+    <div className="min-h-screen bg-black text-white selection:bg-red-500/30 overflow-hidden font-landing-body uppercase">
+      {/* CRT Scanline Overlay */}
+      <div className="fixed inset-0 pointer-events-none opacity-20 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] z-[100]" />
+
+      {/* Terminal Grid Background */}
+      <div className="fixed inset-0 pointer-events-none z-0"
+        style={{
+          backgroundSize: "40px 40px",
+          backgroundImage: "linear-gradient(to right, #111 1px, transparent 1px), linear-gradient(to bottom, #111 1px, transparent 1px)"
+        }}
+      />
+
+      <LandingNavbar />
       <HeroSection />
       <StatsSection />
       <FeaturesSection />
       <ProcessSection />
-      <TeamSection />
+      <DashboardSection />
       <SecuritySection />
       <CtaSection />
-      
-      {/* Footer */}
-      <footer style={{ background: "#040201", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-10 pb-10"
-            style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-            <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-xl flex items-center justify-center"
-                style={{ background: "linear-gradient(135deg,#ef4444,#b91c1c)" }}>
-                <Droplets className="h-4 w-4 text-white" />
-              </div>
-              <span className="font-bold text-lg text-white">Banco de Sangre</span>
-            </div>
-            
-            <div className="flex flex-wrap justify-center gap-7 text-sm font-semibold"
-              style={{ color: "rgba(255,255,255,0.3)" }}>
-              {(["inicio","caracteristicas","equipo"] as const).map((id, i) => (
-                <a key={id} href={`#${id}`} className="hover:text-white transition-colors">
-                  {["Inicio","Características","Equipo"][i]}
-                </a>
-              ))}
-              <a href="https://github.com/FdevMX/blood-bank" target="_blank" rel="noopener noreferrer"
-                className="hover:text-white transition-colors flex items-center gap-1.5">
-                <Github className="h-3.5 w-3.5" /> GitHub
-              </a>
-            </div>
-          </div>
 
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-center md:text-left" style={{ color: "rgba(255,255,255,0.3)" }}>
-              © {new Date().getFullYear()} Banco de Sangre. Desarrollo Open Source.
+      {/* Footer */}
+      <footer className="bg-black p-8 lg:p-12 font-landing-body border-t border-[#333]">
+        <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
+          <div>
+            <div className="text-4xl font-landing-headline font-bold text-white mb-4">BANCO DE SANGRE</div>
+            <p className="text-[10px] text-white/40 mb-2">
+              © {new Date().getFullYear()} BANCO DE SANGRE. DESARROLLO OPEN SOURCE
             </p>
-            <div className="flex items-center gap-2 text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
-              <span>Construido con</span>
-              <Heart className="h-4 w-4 text-red-500/50" />
-              <span>para salvar vidas</span>
-            </div>
+            <p className="text-[10px] text-white/40 flex items-center gap-2">
+              CONSTRUIDO CON <Heart className="h-3 w-3 text-red-500/50" /> PARA SALVAR VIDAS
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 text-[10px]">
+            <a className="text-white/40 hover:text-[#ef4444] underline transition-colors" href="#inicio">INICIO</a>
+            <a className="text-white/40 hover:text-[#ef4444] underline transition-colors" href="#caracteristicas">CARACTERÍSTICAS</a>
+            <a className="text-white/40 hover:text-[#ef4444] underline transition-colors" href="#proceso">PROTOCOLO</a>
+            <a className="text-white/40 hover:text-[#ef4444] underline transition-colors" href="#seguridad">SEGURIDAD</a>
+          </div>
+          <div className="flex justify-start md:justify-end gap-6">
+            <a href="https://github.com/FdevMX/blood-bank" target="_blank" rel="noopener noreferrer"
+              className="w-12 h-12 border border-white flex items-center justify-center hover:border-[#ef4444] hover:text-[#ef4444] transition-colors cursor-pointer">
+              <Github className="h-5 w-5" />
+            </a>
           </div>
         </div>
       </footer>
     </div>
   );
 }
-
