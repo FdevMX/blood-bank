@@ -1,7 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto+Mono:wght@300;400;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+
+/* === LANDING PAGE FONT UTILITIES === */
+.font-landing-headline {
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-landing-body {
+  font-family: 'Roboto Mono', monospace;
+}
 
 @custom-variant dark (&:is(.dark *));
 
