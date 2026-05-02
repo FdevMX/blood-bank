@@ -176,4 +176,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     maxAge: 8 * 60 * 60, // 8 horas (jornada laboral)
     updateAge: 60 * 60,  // Refrescar token cada hora de actividad
   },
+
+  // ── Confiar en hosts ───────────────────────────────────────
+  trustHost: true,
 });
