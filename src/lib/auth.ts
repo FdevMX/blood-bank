@@ -33,6 +33,8 @@ async function registrarAuditoria(
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret: process.env.AUTH_SECRET,
+  basePath: "/api/auth",
   providers: [
     // ── 1. Google OAuth ──────────────────────────────────────
     Google({

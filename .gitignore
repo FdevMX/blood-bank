@@ -47,3 +47,7 @@ next-env.d.ts
 docs/*
 
 skills-lock.json
+
+cloud-sql-proxy.exe
+supabase_public.sql
+supabase.sql
