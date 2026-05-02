@@ -76,7 +76,7 @@ export default function LandingClient() {
             <a className="text-white/40 hover:text-[#ef4444] underline transition-colors" href="#seguridad">SEGURIDAD</a>
           </div>
           <div className="flex justify-start md:justify-end gap-6">
-            <a href="https://github.com/FdevMX/blood-bank" target="_blank" rel="noopener noreferrer"
+            <a href="https://github.com/fredmdz/blood-bank" target="_blank" rel="noopener noreferrer"
               className="w-12 h-12 border border-white flex items-center justify-center hover:border-[#ef4444] hover:text-[#ef4444] transition-colors cursor-pointer">
               <Github className="h-5 w-5" />
             </a>
